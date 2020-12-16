@@ -259,6 +259,7 @@ namespace KnowYourArmorPatcher
                         }
                     }
                 }
+                Console.WriteLine("Found " + foundEDIDs.Count + " recognized keywords out of " + armor.Keywords.Count + " total keywords for this armor");
                 return foundEDIDs;
             }
 
