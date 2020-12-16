@@ -219,6 +219,7 @@ namespace KnowYourArmorPatcher
                 {
                     if (state.LinkCache.TryResolve<IKeywordGetter>(KnowYourEnemy.MakeFormKey(t.Id), out var keyword))
                     {
+                        Console.WriteLine("Retrieving KYE keyword: " + keyword.EditorID);
                         return (t.Key, Keyword: keyword.FormKey);
                     }
                     else
@@ -235,14 +236,17 @@ namespace KnowYourArmorPatcher
             // Returns all keywords from an armor that are found in armor rules json 
             List<string> GetRecognizedKeywords(IArmorGetter armor)
             {
+                Console.WriteLine("Getting recognized keywords for armor: " + armor.EditorID);
                 List<string> foundEDIDs = new List<string>();
                 if (armor.Keywords == null) return foundEDIDs;
                 foreach (var keyword in armor.Keywords)
                 {
                     if (keyword.TryResolve(state.LinkCache, out var kw))
                     {
+                        Console.WriteLine("Looping over armor keyword with EDID: " + kw.EditorID);
                         if (kw.EditorID != null && armorRulesJson![kw.EditorID] != null)
                         {
+                            Console.WriteLine("Keyword was found in armor Rules JSON! Adding to foundEDIDs");
                             // Make sure ArmorMaterialIron comes first - fixes weird edge case generating descriptions when ArmorMaterialIronBanded is also in there
                             if (kw.FormKey == Skyrim.Keyword.ArmorMaterialIronBanded)
                             {
@@ -268,6 +272,7 @@ namespace KnowYourArmorPatcher
 
                 if (npc.Race.TryResolve(state.LinkCache, out var race) && race.EditorID != null && armorRaces.Contains(race.EditorID))
                 {
+                    Console.WriteLine("Adding armor perk to NPC: " + npc.EditorID);
                     var npcCopy = state.PatchMod.Npcs.GetOrAddAsOverride(npc);
                     if (npcCopy.Perks == null) npcCopy.Perks = new ExtendedList<PerkPlacement>();
                     PerkPlacement p = new PerkPlacement
